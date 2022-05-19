@@ -1,23 +1,23 @@
-const { Mago, Post } = require("../models/index.js");
+const { Mago, Cesta } = require("../models/index.js");
 
 const MagoController = {
   create(req, res) {
     req.body.role = "Mago";
     Mago.create({ ...req.body })
       .then((Mago) =>
-        res.status(201).send({ message: "Usuario creado con éxito", Mago })
+        res.status(201).send({ message: "Usuario mágico creado con éxito", Mago })
       )
       .catch(console.error);
   },
   getAll(req, res) {
     Mago.findAll({
-      include: [Post],
+      include: [Cesta],
     })
       .then((Magos) => res.send(Magos))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar las publicaciones",
+          message: "Ha habido un problema al cargar tu cesta",
         });
       });
   },
@@ -28,17 +28,17 @@ const MagoController = {
           id: req.params.id,
         },
       });
-      await Post.destroy({
+      await Cesta.destroy({
         where: {
           MagoId: req.params.id,
         },
       });
-      res.send("Erradicado. Con éxito.");
+      res.send("Avada Kedavra");
     } catch (error) {
       console.log(err);
       res.status(500).send({
         message:
-          "Ha habido un problema al eliminar el usuario y sus publicaciones",
+          "Ha habido un problema al eliminar el mago y su cesta mágica",
       });
     }
   },
@@ -51,7 +51,7 @@ const MagoController = {
         },
       }
     );
-    res.send("Usuario actualizado con éxito");
+    res.send("Mago actualizado con éxito");
   },
 };
 
