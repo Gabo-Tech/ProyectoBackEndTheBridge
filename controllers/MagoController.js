@@ -1,18 +1,19 @@
-const { Post, User, Sequelize } = require("../models/index.js");
-const { Op } = Sequelize;
-const PostController = {
+const { Mago, Post } = require("../models/index.js");
+
+const MagoController = {
   create(req, res) {
-    Post.create({ ...req.body })
-      .then((post) =>
-        res.status(201).send({ message: "Publicación creada con éxito", post })
+    req.body.role = "Mago";
+    Mago.create({ ...req.body })
+      .then((Mago) =>
+        res.status(201).send({ message: "Usuario creado con éxito", Mago })
       )
       .catch(console.error);
   },
   getAll(req, res) {
-    Post.findAll({
-      include: [User.name],
+    Mago.findAll({
+      include: [Post],
     })
-      .then((posts) => res.send(posts))
+      .then((Magos) => res.send(Magos))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
@@ -20,43 +21,38 @@ const PostController = {
         });
       });
   },
-  getById(req, res) {
-    Post.findByPk(req.params.id, {
-      include: [User],
-    })
-      .then((post) => res.send(post))
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send({
-          message: "Ha habido un problema al cargar la publicación",
-        });
-      });
-  },
-  getByName(req, res) {
-    Post.findAll({
-      where: {
-        title: {
-          [Op.like]: `%${req.params.title}%`,
-        },
-      },
-      include: [User],
-    })
-      .then((post) => res.send(post))
-      .catch((err) => {
-        console.log(err);
-        res.status(500).send({
-          message: "Ha habido un problema al cargar la publicación",
-        });
-      });
-  },
   async delete(req, res) {
-    await Post.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.send("La publicación ha sido eliminada con éxito");
+    try {
+      await Mago.destroy({
+        where: {
+          id: req.params.id,
+        },
+      });
+      await Post.destroy({
+        where: {
+          MagoId: req.params.id,
+        },
+      });
+      res.send("Erradicado. Con éxito.");
+    } catch (error) {
+      console.log(err);
+      res.status(500).send({
+        message:
+          "Ha habido un problema al eliminar el usuario y sus publicaciones",
+      });
+    }
+  },
+  async update(req, res) {
+    await Mago.update(
+      { ...req.body },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.send("Usuario actualizado con éxito");
   },
 };
 
-module.exports = PostController;
+module.exports = MagoController;
