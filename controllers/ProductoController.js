@@ -1,62 +1,62 @@
-const { Post, User, Sequelize } = require("../models/index.js");
+const { Producto, Categoria, Sequelize } = require("../models/index.js");
 const { Op } = Sequelize;
-const PostController = {
+const ProductoController = {
   create(req, res) {
-    Post.create({ ...req.body })
-      .then((post) =>
-        res.status(201).send({ message: "Publicación creada con éxito", post })
+    Producto.create({ ...req.body })
+      .then((producto) =>
+        res.status(201).send({ message: "Producto creado con éxito", producto })
       )
       .catch(console.error);
   },
   getAll(req, res) {
-    Post.findAll({
-      include: [User.name],
+    Producto.findAll({
+      include: [Categoria.name],
     })
-      .then((posts) => res.send(posts))
+      .then((productos) => res.send(productos))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar las publicaciones",
+          message: "Ha habido un problema al cargar los productos",
         });
       });
   },
   getById(req, res) {
-    Post.findByPk(req.params.id, {
-      include: [User],
+    Producto.findByPk(req.params.id, {
+      include: [Categoria],
     })
-      .then((post) => res.send(post))
+      .then((producto) => res.send(producto))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar la publicación",
+          message: "Ha habido un problema al cargar los productos",
         });
       });
   },
   getByName(req, res) {
-    Post.findAll({
+    Producto.findAll({
       where: {
         title: {
           [Op.like]: `%${req.params.title}%`,
         },
       },
-      include: [User],
+      include: [Categoria],
     })
-      .then((post) => res.send(post))
+      .then((producto) => res.send(producto))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar la publicación",
+          message: "Ha habido un problema al cargar los productos",
         });
       });
   },
   async delete(req, res) {
-    await Post.destroy({
+    await Producto.destroy({
       where: {
         id: req.params.id,
       },
     });
-    res.send("La publicación ha sido eliminada con éxito");
+    res.send("El producto ha sido eliminado con éxito");
   },
 };
 
-module.exports = PostController;
+module.exports = ProductoController;
