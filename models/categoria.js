@@ -15,9 +15,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Categoria.init({
     id: DataTypes.INTEGER.AUTO_INCREMENT,
-    nombre: DataTypes.STRING,
-    ProductoId: DataTypes.INTEGER,
-
+    nombre: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'Categoria',

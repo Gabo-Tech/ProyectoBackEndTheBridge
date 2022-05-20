@@ -10,14 +10,13 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Cesta.hasMany(models.Pedido),
-      Cesta.belongsTo(models.Mago)
-    
+      Cesta.belongsTo(models.Pedido),
+      Cesta.belongsTo(models.Producto)
     }
   }
   Cesta.init({
     id: DataTypes.INTEGER.AUTO_INCREMENT,
-    MagoId: DataTypes.INTEGER,
+    ProductoId: DataTypes.INTEGER,
     PedidoId: DataTypes.INTEGER
     
   }, {
