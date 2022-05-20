@@ -1,10 +1,11 @@
-const { Cesta, Pedido, Sequelize } = require("../models/index.js");
+const { Cesta, Mago, Sequelize } = require("../models/index.js");
 const { Op } = Sequelize;
 const CestaController = {
+  //Relación de 
   create(req, res) {
     Cesta.create({ ...req.body })
-      .then((pedido) =>
-        res.status(201).send({ message: "Pedido creado con éxito", pedido })
+      .then((cesta) =>
+        res.status(201).send({ message: "Publicación creada con éxito", cesta })
       )
       .catch(console.error);
   },
@@ -12,11 +13,11 @@ const CestaController = {
     Cesta.findAll({
       include: [Mago.name],
     })
-      .then((pedidos) => res.send(pedidos))
+      .then((cestas) => res.send(cestas))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar los pedidos",
+          message: "Ha habido un problema al cargar las publicaciones",
         });
       });
   },
@@ -24,11 +25,28 @@ const CestaController = {
     Cesta.findByPk(req.params.id, {
       include: [Mago],
     })
-      .then((pedido) => res.send(pedido))
+      .then((cesta) => res.send(cesta))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar el pedido",
+          message: "Ha habido un problema al cargar la publicación",
+        });
+      });
+  },
+  getByName(req, res) {
+    Cesta.findAll({
+      where: {
+        title: {
+          [Op.like]: `%${req.params.title}%`,
+        },
+      },
+      include: [Mago],
+    })
+      .then((cesta) => res.send(cesta))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar la publicación",
         });
       });
   },
@@ -38,7 +56,7 @@ const CestaController = {
         id: req.params.id,
       },
     });
-    res.send("El pedido ha sido eliminada con éxito");
+    res.send("La publicación ha sido eliminada con éxito");
   },
 };
 
