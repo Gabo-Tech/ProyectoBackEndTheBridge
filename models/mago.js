@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Mago.hasOne(models.Cesta)
+      Mago.hasMany(models.Pedido)
     }
   }
   Mago.init({
@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
     mago: DataTypes.STRING,
     lechuza: DataTypes.STRING,
     hechizo: DataTypes.STRING,
-    role: DataTypes.STRING
+    
   }, {
     sequelize,
     modelName: 'Mago',

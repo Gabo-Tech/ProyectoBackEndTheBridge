@@ -16,9 +16,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   Pedido.init({
     id: DataTypes.INTEGER.AUTO_INCREMENT,
-    CestaId: DataTypes.INTEGER,
-    ProductoId: DataTypes.INTEGER,
-    sumatotal: DataTypes.INTEGER,
+    MagoId: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'Pedido',
