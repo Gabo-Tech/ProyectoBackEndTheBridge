@@ -1,12 +1,29 @@
 const { Mago, Pedido } = require("../models/index.js");
+const bcrypt = require('bcryptjs');
 
 const MagoController = {
   create(req, res) {
-    Mago.create({ ...req.body })
-      .then((mago) =>
-        res.status(201).send({ message: "Usuario mágico creado con éxito", mago })
-      )
-      .catch(console.error);
+    req.body.role = "user";
+    const password = bcrypt.hashSync(req.body.password,10)
+    Mago.create({...req.body, password:password })
+    .then(mago => res.status(201).send({ message: 'Usuario mágico creado con éxito', mago }))
+    .catch(console.error)
+  },
+  login(req,res){
+    User.findOne({
+    where:{
+    email:req.body.email
+    }
+    }).then(mago=>{
+    if(!mago){
+    return res.status(400).send({message:"Mago o hechizo incorrectos"})
+    }
+    const isMatch = bcrypt.compareSync(req.body.password, mago.password);
+    if(!isMatch){
+    return res.status(400).send({message:"Mago o hechizo incorrectos"})
+    }
+    res.send(mago)
+    })
   },
   getAll(req, res) {
     Mago.findAll({
