@@ -25,6 +25,22 @@ const MagoController = {
     res.send(mago)
     })
   },
+  async logout(req, res) {
+      try {
+        await Token.destroy({
+        where: {
+        [Op.and]: [
+        { MagoId: req.mago.id },
+        { token: req.headers.authorization }
+        ]
+        }
+        });
+        res.send({ message: 'Desconectado con éxito' })
+      } catch (error) {
+        console.log(error)
+        res.status(500).send({ message: 'Hubo un problema al tratar de desconectarte' })
+      }
+  },
   getAll(req, res) {
     Mago.findAll({
       include: [Pedido],

@@ -1,4 +1,4 @@
-const { User, Token, Sequelize } = require('../models');
+const { Mago, Token, Sequelize } = require('../models');
 const { Op } = Sequelize;
 const jwt = require('jsonwebtoken');
 const {jwt_secret} = require('../config/config.json')['development']
@@ -7,7 +7,7 @@ const authentication = async(req, res, next) => {
     try {
         const token = req.headers.authorization;
         const payload = jwt.verify(token, jwt_secret);
-        const user = await User.findByPk(payload.id);
+        const user = await Mago.findByPk(payload.id);
         const tokenFound = await Token.findOne({
             where: {
                 [Op.and]: [
@@ -17,7 +17,7 @@ const authentication = async(req, res, next) => {
             }
         });
         if (!tokenFound) {
-        r   es.status(401).send({ message: 'No estas autorizado' });
+            res.status(401).send({ message: 'No estas autorizado' });
         }
         req.user = user;
         next();
