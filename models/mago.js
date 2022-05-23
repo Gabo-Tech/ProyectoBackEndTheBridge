@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Mago.hasMany(models.Pedido);
     }
   }
   Mago.init({

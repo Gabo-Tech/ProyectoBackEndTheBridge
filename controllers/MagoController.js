@@ -1,10 +1,13 @@
-const { Mago, Pedido } = require("../models/index.js");
-const bcrypt = require('bcryptjs');
+const { Mago, Pedido, Token, Sequelize } = require("../models/index.js");
+const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
+const { jwt_secret } = require("../config/config.json")["development"];
+const { Op } = Sequelize;
 
 const MagoController = {
   create(req, res) {
     req.body.role = "mago";
-    const password = bcrypt.hashSync(req.body.password,10)
+    const password = /*bcrypt.hashSync(*/req.body.password;/*,10)*/
     Mago.create({...req.body, password:password })
     .then(mago => res.status(201).send({ message: 'Usuario mágico creado con éxito', mago }))
     .catch(console.error)
@@ -42,14 +45,44 @@ const MagoController = {
       }
   },
   getAll(req, res) {
+    
     Mago.findAll({
       include: [Pedido],
     })
-      .then((magos) => res.send(magos))
+      .then(magos => res.send(magos))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
-          message: "Ha habido un problema al cargar los pedidos",
+          message: "Ha habido un problema al cargar los magos",
+        });
+      });
+  },
+  getById(req, res) {
+    Mago.findByPk(req.params.id, {
+      include: [Categoria],
+    })
+      .then((mago) => res.send(mago))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar el mago",
+        });
+      });
+  },
+  getByName(req, res) {
+    Mago.findAll({
+      where: {
+        title: {
+          [Op.like]: `%${req.params.title}%`,
+        },
+      },
+      include: [Categoria],
+    })
+      .then((mago) => res.send(mago))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar el mago",
         });
       });
   },
@@ -86,5 +119,4 @@ const MagoController = {
     res.send("Usuario mágico actualizado con éxito");
   },
 };
-
 module.exports = MagoController;
