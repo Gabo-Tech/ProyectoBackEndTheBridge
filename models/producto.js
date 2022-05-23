@@ -10,19 +10,17 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      
+      // define association here
       Producto.hasOne(models.Categoria)
-
-    //   Pedido = require.belongsToMany(Producto, { through: 'Cesta' }); 
+        //   Pedido = require.belongsToMany(Producto, { through: 'Cesta' }); 
     //   Producto.belongsToMany(Pedido = require, { through: 'Cesta' });    
     // }
     }
   }
   Producto.init({
-    id: DataTypes.INTEGER.AUTO_INCREMENT,
     CategoriaId: DataTypes.INTEGER,
     nombre: DataTypes.STRING,
-    precio: DataTypes.INTEGER,
+    precio: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Producto',

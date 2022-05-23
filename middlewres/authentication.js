@@ -7,11 +7,11 @@ const authentication = async(req, res, next) => {
     try {
         const token = req.headers.authorization;
         const payload = jwt.verify(token, jwt_secret);
-        const user = await Mago.findByPk(payload.id);
+        const mago = await Mago.findByPk(payload.id);
         const tokenFound = await Token.findOne({
             where: {
                 [Op.and]: [
-                    { UserId: user.id },
+                    { MagoId: mago.id },
                     { token: token }
                 ]
             }
@@ -19,7 +19,7 @@ const authentication = async(req, res, next) => {
         if (!tokenFound) {
             res.status(401).send({ message: 'No estas autorizado' });
         }
-        req.user = user;
+        req.mago = mago;
         next();
     } catch (error) {
         console.log(error)

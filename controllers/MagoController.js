@@ -3,14 +3,14 @@ const bcrypt = require('bcryptjs');
 
 const MagoController = {
   create(req, res) {
-    req.body.role = "user";
+    req.body.role = "mago";
     const password = bcrypt.hashSync(req.body.password,10)
     Mago.create({...req.body, password:password })
     .then(mago => res.status(201).send({ message: 'Usuario mágico creado con éxito', mago }))
     .catch(console.error)
   },
   login(req,res){
-    User.findOne({
+    Mago.findOne({
     where:{
     email:req.body.email
     }
