@@ -1,4 +1,4 @@
-const { Producto, Categoria, Sequelize } = require("../models/index.js");
+const { Product, Category, Sequelize } = require("../models/index.js");
 const { Op } = Sequelize;
 const ProductoController = {
   create(req, res) {
@@ -9,10 +9,10 @@ const ProductoController = {
       .catch(console.error);
   },
   getAll(req, res) {
-    Producto.findAll({
-      include: [Categoria.name],
+    Product.findAll({
+      include:[Category]
     })
-      .then((productos) => res.send(productos))
+      .then(productos => res.send(productos))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
