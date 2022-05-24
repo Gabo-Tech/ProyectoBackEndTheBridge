@@ -67,7 +67,7 @@ const MagoController = {
   },
   getById(req, res) {
     Mago.findByPk(req.params.id, {
-      include: [Pedido],
+      include: [Pedido]
     })
       .then((mago) => res.send(mago))
       .catch((err) => {
@@ -115,6 +115,21 @@ const MagoController = {
       });
     }
   },
+
+
+  getConnect(req, res) {
+    Mago.findOne({ where: { id: req.mago.id } }, {
+      include: [Pedido],
+    })
+      .then((mago) => res.send(mago))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar el mago",
+        });
+      });
+  },
+
   async update(req, res) {
     await Mago.update(
       { ...req.body },

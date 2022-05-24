@@ -19,7 +19,7 @@ const authentication = async(req, res, next) => {
         if (!tokenFound) {
             res.status(401).send({ message: 'No estas autorizado' });
         }
-        req.mago = mago;
+        req.mago = mago; 
         next();
     } catch (error) {
         console.log(error)
