@@ -6,11 +6,17 @@ const { Op } = Sequelize;
 
 const MagoController = {
   create(req, res) {
-    req.body.role = "mago";
-    const password = /*bcrypt.hashSync(*/req.body.password;/*,10)*/
-    Mago.create({...req.body, password:password })
+    if(!req.body==""||!req.body=={}){
+      req.body.role = "mago"
+    const hechizo = bcrypt.hashSync(req.body.hechizo,10)
+    Mago.create({...req.body, hechizo:hechizo })
     .then(mago => res.status(201).send({ message: 'Usuario mágico creado con éxito', mago }))
     .catch(console.error)
+    } else {
+      console.log("no hay datos");
+      res.status(201).send({ message: "Somos magos pero no tanto" });
+    }
+    
   },
   login(req,res){
     Mago.findOne({
@@ -21,10 +27,10 @@ const MagoController = {
     if(!mago){
     return res.status(400).send({message:" ajajja me rio en tu cara"})
     }
-    // const isMatch = bcrypt.compareSync(req.body.hechizo, mago.hechizo);
-    // if(!isMatch){
-    // return res.status(400).send({message:"Mago o hechizo incorrectos"})
-    // }
+    const isMatch = bcrypt.compareSync(req.body.hechizo, mago.hechizo);
+    if(!isMatch){
+    return res.status(400).send({message:"Mago o hechizo incorrectos"})
+    }
     token = jwt.sign({ id: mago.id }, jwt_secret);
     Token.create({ token, MagoId: mago.id });
     res.send({ message: 'Bienvenid@' + mago.mago, mago, token });
@@ -61,7 +67,7 @@ const MagoController = {
   },
   getById(req, res) {
     Mago.findByPk(req.params.id, {
-      include: [Categoria],
+      include: [Pedido],
     })
       .then((mago) => res.send(mago))
       .catch((err) => {
