@@ -1,16 +1,16 @@
-const { Categoria, Producto } = require("../models/index.js");
+const { Category, Product } = require("../models/index.js");
 
 const CategoriaController = {
   create(req, res) {
-    Categoria.create({ ...req.body })
+    Category.create({ ...req.body })
       .then((categoria) =>
         res.status(201).send({ message: "Categoría creada con éxito", categoria })
       )
       .catch(console.error);
   },
   getAll(req, res) {
-    Categoria.findAll({
-      include: [Producto],
+    Category.findAll({
+      include: [Product],
     })
       .then((categorias) => res.send(categorias))
       .catch((err) => {
@@ -20,16 +20,30 @@ const CategoriaController = {
         });
       });
   },
+
+  getById(req, res) {
+    Category.findByPk(req.params.id, {
+      include: [Mago],
+    })
+      .then((pedido) => res.send(pedido))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al mirar la categoria",
+        });
+      });
+  },
+
   async delete(req, res) {
     try {
-      await Categoria.destroy({
+      await Category.destroy({
         where: {
           id: req.params.id,
         },
       });
-      await Producto.destroy({
+      await Product.destroy({
         where: {
-          CategoriaId: req.params.id,
+          CategoryId: req.params.id,
         },
       });
       res.send("Categoría eliminada");
@@ -42,7 +56,7 @@ const CategoriaController = {
     }
   },
   async update(req, res) {
-    await Categoria.update(
+    await Category.update(
       { ...req.body },
       {
         where: {

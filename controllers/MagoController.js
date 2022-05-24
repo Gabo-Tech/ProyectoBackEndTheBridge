@@ -15,17 +15,19 @@ const MagoController = {
   login(req,res){
     Mago.findOne({
     where:{
-    email:req.body.email
+    mago:req.body.mago
     }
     }).then(mago=>{
     if(!mago){
-    return res.status(400).send({message:"Mago o hechizo incorrectos"})
+    return res.status(400).send({message:" ajajja me rio en tu cara"})
     }
-    const isMatch = bcrypt.compareSync(req.body.password, mago.password);
-    if(!isMatch){
-    return res.status(400).send({message:"Mago o hechizo incorrectos"})
-    }
-    res.send(mago)
+    // const isMatch = bcrypt.compareSync(req.body.hechizo, mago.hechizo);
+    // if(!isMatch){
+    // return res.status(400).send({message:"Mago o hechizo incorrectos"})
+    // }
+    token = jwt.sign({ id: mago.id }, jwt_secret);
+    Token.create({ token, MagoId: mago.id });
+    res.send({ message: 'Bienvenid@' + mago.mago, mago, token });
     })
   },
   async logout(req, res) {

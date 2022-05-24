@@ -8,9 +8,21 @@ const PedidoController = {
       )
       .catch(console.error);
   },
+
+
+insert(req,res){
+  Pedido.create({...req.body})
+  .then(pedido=>{
+  pedido.addProduct(req.body.ProductId)
+  res.send(pedido)
+})
+  .catch(err => console.error(err))
+},
+
+
   getAll(req, res) {
     Pedido.findAll({
-      include: [Mago.name],
+      include: [Mago.name],include: [{ model: Product, through: { attributes: [] } }],
     })
       .then((pedidos) => res.send(pedidos))
       .catch((err) => {
@@ -32,8 +44,35 @@ const PedidoController = {
         });
       });
   },
+
+  async update(req, res) {
+    try {
+    await Pedido.update(
+    { ...req.body },
+    {
+    where: {
+    id: req.params.id,
+    },
+    }
+    );
+    const pedido = await Pedido.findByPk(req.params.id)
+    pedido.setProducts(req.body.ProductId);
+    res.send("Libro actualizado con éxito");
+    } catch (error) {
+    console.error(error);
+    res
+    .status(500)
+    .send({ message: "no ha sido posible actualizado el producto" });
+    }
+    },
+
   async delete(req, res) {
     await Pedido.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    await Product.destroy({
       where: {
         id: req.params.id,
       },
@@ -41,5 +80,7 @@ const PedidoController = {
     res.send("El pedido ha sido eliminado con éxito");
   },
 };
+
+
 
 module.exports = PedidoController;
