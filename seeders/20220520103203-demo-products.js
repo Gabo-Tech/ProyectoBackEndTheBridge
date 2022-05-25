@@ -27,14 +27,14 @@ module.exports = {
     },{
       nombre: 'La capa de invisibilidad',
       precio: '5000',
-      CategoryId:1,
+      CategoryId:2,
       createdAt: new Date(),
       updatedAt: new Date()
     },{
       nombre: 'Dobby',
       precio: '100',
  
-      CategoryId:1,
+      CategoryId:3,
      createdAt: new Date(),
       updatedAt: new Date()
     },

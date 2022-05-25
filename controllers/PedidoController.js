@@ -1,4 +1,4 @@
-const { Pedido, Mago, Sequelize } = require("../models/index.js");
+const { Pedido, Product, Mago, Sequelize } = require("../models/index.js");
 const { Op } = Sequelize;
 const PedidoController = {
   create(req, res) {
@@ -32,6 +32,8 @@ insert(req,res){
         });
       });
   },
+
+
   getById(req, res) {
     Pedido.findByPk(req.params.id, {
       include: [Mago],

@@ -6,7 +6,8 @@ const { jwt_secret } = require('../config/config.json')['development'];
 
 const ProductoController = {
   create(req, res) {
-    if(req.body==""||req.body=={}){
+    if(!req.body.nombre =="" && !req.body.precio == "" && !req.body.CategoryId == ""){
+      console.log(req.body)
       Product.create({ ...req.body })
         .then((producto) =>
           res.status(201).send({ message: "Producto creado con éxito", producto })
@@ -46,6 +47,31 @@ const ProductoController = {
     Product.findAll({
       where: {
         precio: {
+          [Op.eq]: `${req.params.precio}`,
+        },
+      },
+      order: [
+      
+        ['precio', 'DESC']],
+    
+    })
+      .then((producto) => res.send(producto))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar los productos",
+        });
+      });
+  },
+
+
+  getByPriceDesc(req, res) {
+    if(req.params.precio==undefined||req.params.precio=={}){
+      req.params.precio=100000000;
+    }
+    Product.findAll({
+      where: {
+        precio: {
           [Op.lte]: `${req.params.precio}`,
         },
       },
@@ -66,8 +92,8 @@ const ProductoController = {
   getByName(req, res) {
     Product.findAll({
       where: {
-        title: {
-          [Op.like]: `%${req.params.title}%`,
+        nombre: {
+          [Op.like]: `${req.params.title}`,
         },
       },
       include: [Category],
@@ -80,6 +106,20 @@ const ProductoController = {
         });
       });
   },
+
+  async update(req, res) {
+    await Product.update(
+      { ...req.body },
+      {
+        where: {
+          id: req.params.id,
+        },
+      }
+    );
+    res.send("Producto mágico actualizado con éxito");
+  },
+
+
   async delete(req, res) {
     await Product.destroy({
       where: {

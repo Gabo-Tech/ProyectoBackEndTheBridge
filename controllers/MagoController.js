@@ -1,4 +1,4 @@
-const { Mago, Pedido, Token, Sequelize } = require("../models/index.js");
+const { Mago,  Pedido, Token, Sequelize } = require("../models/index.js");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { jwt_secret } = require("../config/config.json")["development"];
@@ -25,7 +25,7 @@ const MagoController = {
     }
     }).then(mago=>{
     if(!mago){
-    return res.status(400).send({message:" ajajja me rio en tu cara"})
+    return res.status(400).send({message:" jajjaja me rio en tu cara"})
     }
     const isMatch = bcrypt.compareSync(req.body.hechizo, mago.hechizo);
     if(!isMatch){
@@ -80,11 +80,11 @@ const MagoController = {
   getByName(req, res) {
     Mago.findAll({
       where: {
-        title: {
+        mago: {
           [Op.like]: `%${req.params.title}%`,
         },
       },
-      include: [Categoria],
+      include: [Pedido],
     })
       .then((mago) => res.send(mago))
       .catch((err) => {
@@ -106,7 +106,12 @@ const MagoController = {
           MagoId: req.params.id,
         },
       });
-      res.send("Avada Kedavra");
+      await Token.destroy({
+        where: {
+          MagoId: req.params.id,
+        },
+      });
+      res.send("Avada Kedavra!!!! El mago ha sido eliminado");
     } catch (error) {
       console.log(err);
       res.status(500).send({

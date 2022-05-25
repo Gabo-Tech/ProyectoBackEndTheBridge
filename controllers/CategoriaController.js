@@ -1,12 +1,18 @@
-const { Category, Product } = require("../models/index.js");
+const { Category, Product, Sequelize } = require("../models/index.js");
+const { Op } = Sequelize;
 
 const CategoriaController = {
   create(req, res) {
+    if(!req.body.nombre ==""){
     Category.create({ ...req.body })
       .then((categoria) =>
         res.status(201).send({ message: "Categoría creada con éxito", categoria })
       )
-      .catch(console.error);
+      .catch(console.error);}
+      else {
+        console.log("no hay datos");
+        res.status(201).send({ message: "Somos magos pero no tanto" });
+      }
   },
   getAll(req, res) {
     Category.findAll({
@@ -22,14 +28,31 @@ const CategoriaController = {
   },
 
   getById(req, res) {
-    Category.findByPk(req.params.id, {
-      include: [Mago],
-    })
+    Category.findByPk(req.params.id)
       .then((pedido) => res.send(pedido))
       .catch((err) => {
         console.log(err);
         res.status(500).send({
           message: "Ha habido un problema al mirar la categoria",
+        });
+      });
+  },
+
+
+  getByName(req, res) {
+    Category.findAll({
+      where: {
+        nombre: {
+          [Op.like]: `${req.params.title}`,
+        },
+      },
+      include: [Product],
+    })
+      .then((categoria) => res.send(categoria))
+      .catch((err) => {
+        console.log(err);
+        res.status(500).send({
+          message: "Ha habido un problema al cargar los categoriums",
         });
       });
   },
