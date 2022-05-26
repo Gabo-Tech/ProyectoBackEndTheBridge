@@ -7,7 +7,7 @@
 
 # [Order requests documentation](https://documenter.getpostman.com/view/21016555/Uz5ArJFo)
 
-# Products requests documentation](https://documenter.getpostman.com/view/21016555/Uz5ArJFp#1b5dcc4d-4fd5-4080-be2b-0d5e04b68839)
+# [Products requests documentation](https://documenter.getpostman.com/view/21016555/Uz5ArJFp#1b5dcc4d-4fd5-4080-be2b-0d5e04b68839)
 
 Hi everyone! [Imanol](https://github.com/Imi21) and [Gabo](https://github.com/gabriel19971029) just developed our first API. Feel free tu test it out.
 
