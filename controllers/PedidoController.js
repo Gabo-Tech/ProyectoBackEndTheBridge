@@ -2,11 +2,18 @@ const { Pedido, Product, Mago, Sequelize } = require("../models/index.js");
 const { Op } = Sequelize;
 const PedidoController = {
   create(req, res) {
-    Pedido.create({ ...req.body })
-      .then((pedido) =>
-        res.status(201).send({ message: "Pedido mágico creado con éxito", pedido })
-      )
-      .catch(console.error);
+    if(req.body.ProductId=='5'){
+      setTimeout(function(){
+        res.status(418).send({ message: "Dobby no puede ser comprado, Dobby es un elfo libre"});
+    }, 5000);
+    }else{
+      Pedido.create({ ...req.body })
+        .then((pedido) =>
+          res.status(201).send({ message: "Pedido mágico creado con éxito", pedido })
+        )
+        .catch(console.error);
+
+    }
   },
 
 

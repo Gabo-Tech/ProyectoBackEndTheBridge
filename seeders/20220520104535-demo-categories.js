@@ -21,11 +21,7 @@ module.exports = {
       nombre: 'Pociones',
       createdAt: new Date(),
       updatedAt: new Date()
-    },{
-      nombre: 'Varitas',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }
+    },
 
   ])
   },
