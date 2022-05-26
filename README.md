@@ -30,6 +30,11 @@ This website it's been deployed and made available to the public thanks to Githu
 * [MySQL](https://mysql.com/) 
 * [Sequelize](https://www.sequelize.info/) 
 
+## Database structure
+
+![Database relations](Magos.png)
+![Database tables](Usuarios.png)
+
 ## Contributing
 
   Like, share, subscribe, follow and join our Patreon! Just kidding this is totally for free. 
